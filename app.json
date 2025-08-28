@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Transporte +",
-    "slug": "Transporte +",
+    "name": "transporteplus",
+    "slug": "transporteplus",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "assets/images/icon.png",
-    "scheme": "Transporte +",
+    "scheme": "transporteplus",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {

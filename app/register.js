@@ -6,15 +6,22 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
+  Dimensions,
+  Platform,
+  ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome5, MaterialIcons, Entypo, Feather } from '@expo/vector-icons';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { router } from 'expo-router';
 
+const { width, height } = Dimensions.get('window');
+
 export default function Register() {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null); // 'aluno' ou 'motorista'
+  const [value, setValue] = useState(null);
   const [items, setItems] = useState([
     { label: 'Aluno', value: 'aluno' },
     { label: 'Motorista', value: 'motorista' },
@@ -133,111 +140,122 @@ export default function Register() {
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
     >
-      <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <KeyboardAwareScrollView
+          contentContainerStyle={styles.scrollContainer}
+          enableOnAndroid={true}
+          extraScrollHeight={30}
+          keyboardShouldPersistTaps="handled"
+        >
+          <SafeAreaView style={styles.container}>
+            {/* Botão de Voltar */}
+            <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+              <Feather name="arrow-left" size={26} color="#fff" />
+            </TouchableOpacity>
 
-        {/* Botão de Voltar */}
-        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Feather name="arrow-left" size={26} color="#fff" />
-        </TouchableOpacity>
-
-        {/* Ícone de perfil sobreposto */}
-        <View style={styles.iconWrapper}>
-          <FontAwesome5 name="user-circle" size={80} color="#005086" style={styles.profileIcon} />
-        </View>
-
-        {/* Card */}
-        <View style={styles.card}>
-          <Text style={styles.title}>CADASTRO</Text>
-
-          {/* Dropdown */}
-          <View style={styles.dropdownContainer}>
-            <DropDownPicker
-              open={open}
-              value={value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
-              placeholder="Selecione o tipo de usuário"
-              style={styles.dropdown}
-              dropDownContainerStyle={styles.dropdownBox}
-            />
-          </View>
-
-          {/* Campo Nome */}
-          <View style={styles.inputRow}>
-            <Feather name="user" size={24} color="#005086" style={styles.icon} />
-            <TextInput
-              placeholder="Digite seu nome completo..."
-              placeholderTextColor="#777"
-              style={styles.input}
-              value={form.nome}
-              onChangeText={(text) => handleChange("nome", text)}
-            />
-          </View>
-
-          {/* Campo Email */}
-          <View style={styles.inputRow}>
-            <MaterialIcons name="email" size={24} color="#005086" style={styles.icon} />
-            <TextInput
-              placeholder="Digite aqui seu email..."
-              placeholderTextColor="#777"
-              style={styles.input}
-              value={form.email}
-              onChangeText={(text) => handleChange("email", text)}
-            />
-          </View>
-
-          {/* Campo RA (Aluno) */}
-          {value === 'aluno' && (
-            <View style={styles.inputRow}>
-              <FontAwesome5 name="chalkboard-teacher" size={24} color="#005086" style={styles.icon} />
-              <TextInput
-                placeholder="Insira seu RA..."
-                placeholderTextColor="#777"
-                style={styles.input}
-                value={form.ra}
-                onChangeText={(text) => handleChange("ra", text)}
-              />
+            {/* Ícone de perfil sobreposto */}
+            <View style={styles.iconWrapper}>
+              <FontAwesome5 name="user-circle" size={80} color="#005086" style={styles.profileIcon} />
             </View>
-          )}
 
-          {/* Campo CNH (Motorista) */}
-          {value === 'motorista' && (
-            <View style={styles.inputRow}>
-              <FontAwesome5 name="id-badge" size={24} color="#005086" style={styles.icon} />
-              <TextInput
-                placeholder="Insira sua CNH..."
-                placeholderTextColor="#777"
-                style={styles.input}
-                value={form.cnh}
-                onChangeText={(text) => handleChange("cnh", text)}
-              />
+            {/* Card */}
+            <View style={styles.card}>
+              <Text style={styles.title}>CADASTRO</Text>
+
+              {/* Dropdown */}
+              <View style={styles.dropdownContainer}>
+                <DropDownPicker
+                  open={open}
+                  value={value}
+                  items={items}
+                  setOpen={setOpen}
+                  setValue={setValue}
+                  setItems={setItems}
+                  placeholder="Selecione o tipo de usuário"
+                  style={styles.dropdown}
+                  dropDownContainerStyle={styles.dropdownBox}
+                />
+              </View>
+
+              {/* Campo Nome */}
+              <View style={styles.inputRow}>
+                <Feather name="user" size={24} color="#005086" style={styles.icon} />
+                <TextInput
+                  placeholder="Digite seu nome completo..."
+                  placeholderTextColor="#777"
+                  style={styles.input}
+                  value={form.nome}
+                  onChangeText={(text) => handleChange("nome", text)}
+                />
+              </View>
+
+              {/* Campo Email */}
+              <View style={styles.inputRow}>
+                <MaterialIcons name="email" size={24} color="#005086" style={styles.icon} />
+                <TextInput
+                  placeholder="Digite aqui seu email..."
+                  placeholderTextColor="#777"
+                  style={styles.input}
+                  value={form.email}
+                  onChangeText={(text) => handleChange("email", text)}
+                />
+              </View>
+
+              {/* Campo RA (Aluno) */}
+              {value === 'aluno' && (
+                <View style={styles.inputRow}>
+                  <FontAwesome5 name="chalkboard-teacher" size={24} color="#005086" style={styles.icon} />
+                  <TextInput
+                    placeholder="Insira seu RA..."
+                    placeholderTextColor="#777"
+                    style={styles.input}
+                    value={form.ra}
+                    onChangeText={(text) => handleChange("ra", text)}
+                  />
+                </View>
+              )}
+
+              {/* Campo CNH (Motorista) */}
+              {value === 'motorista' && (
+                <View style={styles.inputRow}>
+                  <FontAwesome5 name="id-badge" size={24} color="#005086" style={styles.icon} />
+                  <TextInput
+                    placeholder="Insira sua CNH..."
+                    placeholderTextColor="#777"
+                    style={styles.input}
+                    value={form.cnh}
+                    onChangeText={(text) => handleChange("cnh", text)}
+                  />
+                </View>
+              )}
+
+              {/* Campo Senha */}
+              <View style={styles.inputRow}>
+                <Entypo name="lock" size={24} color="#005086" style={styles.icon} />
+                <TextInput
+                  placeholder="Insira sua senha..."
+                  placeholderTextColor="#777"
+                  secureTextEntry
+                  style={styles.input}
+                  value={form.senha}
+                  onChangeText={(text) => handleChange("senha", text)}
+                />
+              </View>
+
+              {/* Botão */}
+              <TouchableOpacity
+                style={styles.button}
+                onPress={handleSubmit}
+              >
+                <Text style={styles.buttonText}>CADASTRAR</Text>
+              </TouchableOpacity>
             </View>
-          )}
-
-          {/* Campo Senha */}
-          <View style={styles.inputRow}>
-            <Entypo name="lock" size={24} color="#005086" style={styles.icon} />
-            <TextInput
-              placeholder="Insira sua senha..."
-              placeholderTextColor="#777"
-              secureTextEntry
-              style={styles.input}
-              value={form.senha}
-              onChangeText={(text) => handleChange("senha", text)}
-            />
-          </View>
-
-          {/* Botão */}
-          <TouchableOpacity
-            style={styles.button}
-            onPress={handleSubmit}
-          >
-            <Text style={styles.buttonText}>CADASTRAR</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
+          </SafeAreaView>
+        </KeyboardAwareScrollView>
+      </KeyboardAvoidingView>
     </LinearGradient>
   );
 }
@@ -245,18 +263,23 @@ export default function Register() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
   },
   backButton: {
     position: 'absolute',
-    top: 50,
-    left: 0,
+    top: 40,
+    left: 16,
     zIndex: 10,
   },
   iconWrapper: {
     position: 'absolute',
-    top: 110,
+    top: height * 0.07,
     zIndex: 2,
     backgroundColor: '#fff',
     borderRadius: 60,
@@ -267,8 +290,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   card: {
-    marginTop: 80,
-    width: '85%',
+    marginTop: height * 0.12,
+    width: '90%',
     backgroundColor: '#fff',
     borderRadius: 20,
     padding: 24,
@@ -319,6 +342,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
     borderRadius: 14,
     borderWidth: 0,
+    zIndex: 1000, // garante que fique acima dos campos
   },
   button: {
     backgroundColor: '#005086',

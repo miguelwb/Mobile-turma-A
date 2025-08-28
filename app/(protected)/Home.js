@@ -11,7 +11,7 @@ export default function Home() {
     const checkLogin = async () => {
       const savedRA = await AsyncStorage.getItem('userRA');
       if (!savedRA) {
-        router.replace('/Login'); // Volta para login se não estiver autenticado
+        router.replace('/Login');
       } else {
         setRA(savedRA);
       }
@@ -26,7 +26,7 @@ export default function Home() {
   };
 
   if (!ra) {
-    return <Text>Carregando...</Text>; // Evita piscar a tela enquanto verifica
+    return <Text>Carregando...</Text>;
   }
 
   return (

@@ -24,12 +24,11 @@ export default function Login() {
     if (mockUser) {
       await AsyncStorage.setItem("userRA", ra);
       console.log("Login fake bem-sucedido:", ra);
-      return router.replace("/(protected)/Home"); // ✅ Navega direto
+      return router.replace("/(protected)/Home");
     }
 
-    // 🔹 2) Se não achou no mock, tenta o backend real
     try {
-      const response = await fetch(`${baseURL}/api/login`, {
+      const response = await fetch(`${baseURL}/api/alunos`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +49,6 @@ export default function Login() {
         return Alert.alert('Erro', data.message || 'RA ou senha inválidos');
       }
 
-      // Salvar RA e token (se existir)
       await AsyncStorage.setItem('userRA', data.user.ra.toString());
       if (data.token) {
         await AsyncStorage.setItem('token', data.token);
@@ -58,7 +56,6 @@ export default function Login() {
 
       console.log("Login salvo com sucesso:", data.user.ra);
 
-      // Redirecionar para Home
       router.replace('/(protected)/Home');
     } catch (error) {
       Alert.alert('Erro', 'Erro ao fazer login: ' + error.message);
