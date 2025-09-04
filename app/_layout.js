@@ -1,7 +1,7 @@
-// app/_layout.js
 import { Slot } from 'expo-router';
 import { useFonts } from 'expo-font';
 import { View, ActivityIndicator } from 'react-native';
+import {AuthProvider} from '../contexts/useAuth';
 
 export default function Layout() {
   const [fontsLoaded] = useFonts({
@@ -16,6 +16,8 @@ export default function Layout() {
     'LeagueSpartan-Thin': require('../assets/fonts/LeagueSpartan-Thin.ttf'),
   });
 
+
+
   if (!fontsLoaded) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -24,5 +26,9 @@ export default function Layout() {
     );
   }
 
-  return <Slot />;
+  return (
+    <AuthProvider>
+      <Slot />
+    </AuthProvider>
+  );
 }

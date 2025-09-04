@@ -86,7 +86,7 @@ export default function Register() {
         cnh: isMotorista ? form.cnh.replace(/\D/g, "") : undefined,
       };
 
-      const response = await fetch("https://backend-mobilize-transporte.onrender.com/api/aluno", {
+      const response = await fetch("https://backend-mobilize-transporte.onrender.com/api/alunos/adicionar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(alunoPayload),
@@ -99,6 +99,23 @@ export default function Register() {
         setShowToastError(true);
         return;
       }
+
+      // if (data.alunoId) {
+      //   async function fetchAluno(){
+      //     try{
+      //       const response = await fetch(`https://backend-mobilize-transporte.onrender.com/api/alunos/getId/${alunoId}`, 
+      //         headers: {
+      //           "Content-Type": "application/json"
+      //         },
+      //       )
+      //       const data = await response.json();
+            
+      //     } catch (error){
+      //       throw new error;
+      //       console.log(error);
+      //     }
+      //   }
+      // }
 
       setModalVisible(true);
     } catch (error) {
