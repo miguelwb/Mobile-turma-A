@@ -16,9 +16,9 @@ type AuthContextProps = {
     loading?: boolean;
 };
 
-const AuthContext = createContext<AuthContextProps> ({} as AuthContextProps);
+const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
-export const AuthProvider:FC <{ children: ReactNode }> = ({ children }) => {
+export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<Aluno | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -39,7 +39,7 @@ export const AuthProvider:FC <{ children: ReactNode }> = ({ children }) => {
             }
         }
         loadStorageData();
-    },[]);
+    }, []);
 
     const signIn = async (userData: Aluno) => {
         setUser(userData);

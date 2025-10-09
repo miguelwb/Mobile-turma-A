@@ -1,6 +1,7 @@
-import { Entypo, Feather, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
+import { Entypo, Feather, FontAwesome5 } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
   Alert,
@@ -19,75 +20,60 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { height } = Dimensions.get('window');
 
-export default function Register() {
-  const [form, setForm] = useState({
-    nome: "",
-    email: "",
-    ra: "",
-    senha: "",
-  });
+export default function Login() {
+  const router = useRouter();
+  const [ra, setRA] = useState('08101');
+  const [senha, setSenha] = useState('@mobelize123');
 
-  const [isLoading, setIsLoading] = useState(false);
+  const baseURL = "https://backend-mobilize-transporte.onrender.com";
+  const mockUsers = [
+    { ra: "12345", senha: "123" },
+    { ra: "54321", senha: "321" },
+  ];
 
-  const handleChange = (field, value) => {
-    setForm({ ...form, [field]: value });
-  };
-
-  const validateEmail = (email) => {
-    const re = /\S+@\S+\.\S+/;
-    return re.test(email);
-  };
-
-  const handleSubmit = async () => {
-    if (!form.nome || !form.email || !form.senha || !form.ra) {
-      Alert.alert("Erro", "Preencha todos os campos.");
-      return;
+  async function handleLogin() {
+    if (!ra || !senha) {
+      return Alert.alert("Atenção", "Preencha RA e senha");
     }
 
-    if (!validateEmail(form.email)) {
-      Alert.alert("Erro", "Email inválido.");
-      return;
-    }
-
-    if (form.senha.length < 6) {
-      Alert.alert("Erro", "A senha deve ter pelo menos 6 caracteres.");
-      return;
-    }
-
-    setIsLoading(true);
+    // const mockUser = mockUsers.find(u => u.ra === ra && u.senha === senha);
+    // if (mockUser) {
+    //   await AsyncStorage.setItem("userRA", ra);
+    //   console.log("Login fake bem-sucedido:", ra);
+    //   return router.replace("/(protected)/Home");
+    // }
 
     try {
-      const alunoPayload = {
-        nome: form.nome,
-        email: form.email,
-        senha: form.senha,
-        ra: form.ra.replace(/\D/g, ""),
-      };
-
-      const response = await fetch("https://backend-mobilize-transporte.onrender.com/api/alunos/adicionar", {
+      const response = await fetch(`${baseURL}/api/login`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(alunoPayload),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ra, senha }),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.log('Erro da API:', data);
-        Alert.alert("Erro no cadastro", data.message || "Tente novamente.");
-        return;
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        return Alert.alert("Erro", "Resposta inválida do servidor");
       }
 
-      Alert.alert("Sucesso", "Cadastro realizado com sucesso!");
-      router.back();
+      console.log("Resposta da API:", data);
 
+      if (!response.ok || !data.aluno) {
+        return Alert.alert('Erro', data.message || 'RA ou senha inválidos');
+      }
+
+      await AsyncStorage.setItem('userRA', data.aluno.ra.toString());
+      if (data.token) {
+        await AsyncStorage.setItem('token', data.token);
+      }
+
+      console.log("Login salvo com sucesso:", data.aluno.ra);
+      router.replace('/(protected)/Home');
     } catch (error) {
-      console.error("Erro:", error);
-      Alert.alert("Erro", "Erro no servidor. Tente novamente.");
-    } finally {
-      setIsLoading(false);
+      Alert.alert('Erro', 'Erro ao fazer login: ' + error.message);
     }
-  };
+  }
 
   return (
     <LinearGradient
@@ -100,55 +86,34 @@ export default function Register() {
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        {/* 🔹 Fecha teclado ao clicar fora */}
+        {/* 🔹 fecha teclado ao tocar fora */}
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <SafeAreaView style={styles.safeArea}>
+            {/* Botão de voltar */}
             <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
               <Feather name="arrow-left" size={26} color="#fff" />
             </TouchableOpacity>
 
+            {/* Ícone central redondo */}
             <View style={styles.iconWrapper}>
               <FontAwesome5 name="user-circle" size={80} color="#005086" style={styles.profileIcon} />
             </View>
 
+            {/* Card */}
             <View style={styles.card}>
-              <Text style={styles.title}>CADASTRO DE ALUNO</Text>
-
-              {/* Nome */}
-              <View style={styles.inputRow}>
-                <Feather name="user" size={24} color="#005086" style={styles.icon} />
-                <TextInput
-                  placeholder="Digite seu nome completo..."
-                  placeholderTextColor="#777"
-                  style={styles.input}
-                  value={form.nome}
-                  onChangeText={(text) => handleChange("nome", text)}
-                />
-              </View>
-
-              {/* Email */}
-              <View style={styles.inputRow}>
-                <MaterialIcons name="email" size={24} color="#005086" style={styles.icon} />
-                <TextInput
-                  placeholder="Digite seu email..."
-                  placeholderTextColor="#777"
-                  style={styles.input}
-                  value={form.email}
-                  onChangeText={(text) => handleChange("email", text)}
-                  autoCapitalize="none"
-                />
-              </View>
+              <Text style={styles.title}>PÁGINA DE LOGIN</Text>
 
               {/* RA */}
               <View style={styles.inputRow}>
-                <FontAwesome5 name="chalkboard-teacher" size={24} color="#005086" style={styles.icon} />
+                <Feather name="user" size={24} color="#005086" style={styles.icon} />
                 <TextInput
-                  placeholder="Insira seu RA..."
-                  placeholderTextColor="#777"
-                  style={styles.input}
-                  value={form.ra}
-                  onChangeText={(text) => handleChange("ra", text)}
+                  placeholder="Digite seu RA..."
+                  value={ra}
+                  onChangeText={setRA}
+                  autoCapitalize="none"
                   keyboardType="numeric"
+                  style={styles.input}
+                  placeholderTextColor="#777"
                 />
               </View>
 
@@ -156,20 +121,19 @@ export default function Register() {
               <View style={styles.inputRow}>
                 <Entypo name="lock" size={24} color="#005086" style={styles.icon} />
                 <TextInput
-                  placeholder="Insira sua senha..."
-                  placeholderTextColor="#777"
+                  placeholder="Digite sua senha..."
+                  value={senha}
+                  onChangeText={setSenha}
                   secureTextEntry
+                  autoCapitalize="none"
                   style={styles.input}
-                  value={form.senha}
-                  onChangeText={(text) => handleChange("senha", text)}
+                  placeholderTextColor="#777"
                 />
               </View>
 
               {/* Botão */}
-              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>
-                  {isLoading ? "Cadastrando..." : "CADASTRAR"}
-                </Text>
+              <TouchableOpacity style={styles.button} onPress={handleLogin}>
+                <Text style={styles.buttonText}>ENTRAR</Text>
               </TouchableOpacity>
             </View>
           </SafeAreaView>
