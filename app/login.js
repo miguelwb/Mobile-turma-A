@@ -22,14 +22,16 @@ const { height } = Dimensions.get('window');
 
 export default function Login() {
   const router = useRouter();
-  const [ra, setRA] = useState('08101');
-  const [senha, setSenha] = useState('@mobilize123');
+  const [ra, setRA] = useState('');
+  const [senha, setSenha] = useState('');
 
   const baseURL = "https://backend-mobilize-transporte.onrender.com";
   // const mockUsers = [
   //   { ra: "12345", senha: "123" },
   //   { ra: "54321", senha: "321" },
   // ];
+
+  const [isLoading, setLoading] = useState(false);
 
   async function handleLogin() {
     if (!ra || !senha) {
@@ -42,7 +44,7 @@ export default function Login() {
     //   console.log("Login fake bem-sucedido:", ra);
     //   return router.replace("/(protected)/Home");
     // }
-
+    setLoading(true);
     try {
       const response = await fetch(`${baseURL}/api/login`, {
         method: "POST",
@@ -135,7 +137,9 @@ export default function Login() {
 
               {/* Botão */}
               <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>ENTRAR</Text>
+                <Text style={styles.buttonText}>
+                  {isLoading ? 'Carregando...' : 'ENTRAR'}
+                </Text>
               </TouchableOpacity>
             </View>
           </SafeAreaView>

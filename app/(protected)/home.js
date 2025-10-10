@@ -52,7 +52,6 @@ export default function Home() {
 
   return (
     <View style={(styles.container)}>
-      <Text> Bem-vindo</Text>
       <Map 
       style={styles.map} 
       initialRegion={{
