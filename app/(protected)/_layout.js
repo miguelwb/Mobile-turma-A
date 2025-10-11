@@ -1,12 +1,48 @@
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { useFonts } from 'expo-font';
+import { Image } from 'expo-image';
+import { router } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
 
 function CustomDrawerContent(props) {
+
+    const handleLogout = async () => {
+        await AsyncStorage.removeItem('userRA');
+        router.replace('/login');
+    };
+
     return (
         <View style={{ flex: 1 }}>
+            <View style={{ flex: 0.65, justifyContent: 'center', alignItems: 'center', backgroundColor: '#115f8c', marginBottom: 30 }}>
+                <Image
+                    source={require('../../assets/images/usuario.png')}
+                    style={{ width: 100, height: 100, borderRadius: 50, marginBottom: 10, borderColor: '#093f5d', borderWidth: 3 }}
+                />
+                <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#000000ff' }}>Olá, Usuário</Text>
+            </View>
+            <View style={{ alignItems: 'center', marginBottom: 20 }}>
+                <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#115f8c', textAlign: 'center', marginBottom: 20, fontFamily: 'LeagueSpartan-Bold', textTransform: 'uppercase', height: 32 }}>Instituição de Ensino</Text>
+                <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#115f8c', textAlign: 'center', marginBottom: 20, fontFamily: 'LeagueSpartan-Bold' }}>Ponto de Onibus</Text>
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => router.push('/edit')}
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: '#d9e6ee',
+                        borderRadius: 50,
+                        height: 45,
+                        width: 120,
+                        marginBottom: 30,
+
+                    }}
+                >
+                    <Text style={{ margin: 16, fontSize: 18, color: '#115f8c', fontFamily: 'LeagueSpartan-Bold', fontWeight: 'bold' }}>Editar</Text>
+                </TouchableOpacity>
+            </View>
             <View style={{ flex: 1 }}>
                 <DrawerContentScrollView {...props} scrollEnabled={false}>
                     <DrawerItemList {...props} />
@@ -14,6 +50,7 @@ function CustomDrawerContent(props) {
             </View>
             <TouchableOpacity
                 activeOpacity={0.8}
+                onPress={handleLogout}
                 style={{
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -66,7 +103,7 @@ export default function Layout() {
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={{
                 drawerStyle: {
-                    width: 220,
+                    width: '60%',
                     borderRightColor: '#093f5d',
                     borderRightWidth: 4,
                 },
@@ -86,11 +123,13 @@ export default function Layout() {
                     fontWeight: 'bold',
                     textAlign: 'center',
                 },
+                headerTitle: 'Transporte+',
             }}
         >
-            <Drawer.Screen name="home" options={{ title: 'Mapa', headerTitle: 'Transporte+' }} />
-            <Drawer.Screen name="about" options={{ title: 'Perfil' }} />
+            <Drawer.Screen name="home" options={{ title: 'Mapa' }} />
+            <Drawer.Screen name="about" options={{ title: 'Sobre' }} />
             <Drawer.Screen name="config" options={{ title: 'Configurações' }} />
+            <Drawer.Screen name="edit" options={{ drawerItemStyle: { display: 'none' } }} />
         </Drawer>
 
     );

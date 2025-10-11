@@ -22,8 +22,8 @@ const { height } = Dimensions.get('window');
 
 export default function Login() {
   const router = useRouter();
-  const [ra, setRA] = useState('');
-  const [senha, setSenha] = useState('');
+  const [ra, setRA] = useState('08101');
+  const [senha, setSenha] = useState('@mobilize123');
 
   const baseURL = "https://backend-mobilize-transporte.onrender.com";
   // const mockUsers = [
