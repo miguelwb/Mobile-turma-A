@@ -1,50 +1,47 @@
-# Welcome to your Expo app 👋
+# **Transporte +**
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+O **Transporte +** é um aplicativo desenvolvido pela **Mobiize** com o objetivo de otimizar o gerenciamento das rotas escolares, permitindo que escolas e gestores acompanhem facilmente os pontos de embarque e desembarque dos alunos, além de visualizar as rotas em um mapa interativo.
 
-## Get started
+## **Funcionalidades**
 
-1. Install dependencies
+### 1. **Mapa Interativo**
+O aplicativo integra um mapa interativo que exibe todas as escolas e pontos de ônibus. Isso permite aos gestores visualizar de maneira clara e intuitiva onde cada ponto de embarque está localizado e qual escola ele atende.
 
-   ```bash
-   npm install
-   ```
+### 2. **Gestão de Pontos de Embarque**
+Os gestores podem adicionar, editar e excluir pontos de embarque. Cada ponto é marcado no mapa com informações como:
+- Nome do ponto
+- Endereço
+- Número de alunos atendidos
+- Horário de coleta
 
-2. Start the app
+### 3. **Rotas Personalizadas**
+O aplicativo oferece a possibilidade de criar e personalizar rotas escolares. A partir de um conjunto de pontos de embarque e escolas, os gestores podem:
+- Definir a ordem de visitação dos pontos
+- Gerenciar horários de cada ponto
+- Monitorar a eficiência das rotas
 
-   ```bash
-   npx expo start
-   ```
+### 4. **Notificações e Alertas**
+O sistema envia notificações automáticas para pais e responsáveis sobre:
+- Mudanças nas rotas
+- Atrasos ou alterações nos horários de transporte
+- Atualizações importantes sobre a rota escolar
 
-In the output, you'll find options to open the app in a
+### 5. **Relatórios de Transporte**
+Através do painel administrativo, é possível gerar relatórios detalhados sobre o transporte escolar, incluindo:
+- Número de alunos transportados
+- Tempo médio de deslocamento
+- Frequência de alterações nas rotas
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### 6. **Login e Perfil de Usuário**
+O aplicativo oferece diferentes níveis de acesso:
+- **Gestores**: Acesso completo para administrar rotas, pontos e relatórios.
+- **Motoristas**: Acesso para visualizar rotas e pontos de embarque, com informações de horários.
+- **Pais/Responsáveis**: Acesso para acompanhar a rota do filho e receber notificações.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## **Tecnologias Utilizadas**
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- **Frontend**: ReactJS, Leaflet (para visualização do mapa)
+- **Backend**: Node.js, Express
+- **Banco de Dados**: MongoDB
+- **Mapas**: API do Google Maps / OpenStreetMap
+- **Autenticação**: JWT (JSON Web Tokens)
